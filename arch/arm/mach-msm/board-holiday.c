@@ -2275,7 +2275,7 @@ static void __init msm8x60_init_dsps(void)
 #define MSM_PMEM_AUDIO_SIZE   0x239000
 
 #define MSM_PMEM_AUDIO_BASE   (MSM_PMEM_ADSP_BASE - MSM_PMEM_AUDIO_SIZE)
-#define MSM_PMEM_ADSP_BASE    (0x70000000 - MSM_PMEM_ADSP_SIZE)
+#define MSM_PMEM_ADSP_BASE    (0x80000000 - MSM_PMEM_ADSP_SIZE)
 
 /* END PMEM Memory map */
 
