@@ -12,7 +12,7 @@ MAKE="4"
 ## Set compiler location to compile with linaro cortex a8
 echo "Setting compiler location..."
 export ARCH=arm
-export CROSS_COMPILE=$HOME/android/system/prebuilt/linux-x86/toolchain/linaro-arm-cortex-a8/bin/arm-cortex_a8-linux-gnueabi-
+export CROSS_COMPILE=$HOME/android/cm-11/prebuilt/linux-x86/toolchain/linaro-arm-cortex-a8/bin/arm-cortex_a8-linux-gnueabi-
 
 ## Build kernel using holiday_defconfig
 make holiday_defconfig
