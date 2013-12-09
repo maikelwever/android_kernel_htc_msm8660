@@ -7010,7 +7010,7 @@ static void __init msm8x60_calculate_reserve_sizes(void)
 
 static int msm8x60_paddr_to_memtype(phys_addr_t paddr)
 {
-	if (paddr >= 0x40000000 && paddr < 0x70000000)
+	if (paddr >= 0x40000000 && paddr < 0x80000000)
 		return MEMTYPE_EBI1;
 	if (paddr >= 0x38000000 && paddr < 0x40000000)
 		return MEMTYPE_SMI;
@@ -7329,7 +7329,7 @@ static void __init holiday_init(void)
 }
 
 #define PHY_BASE_ADDR1  0x48000000
-#define SIZE_ADDR1	  0x28000000
+#define SIZE_ADDR1	  0x38000000
 
 static void __init holiday_fixup(struct machine_desc *desc, struct tag *tags,
 				 char **cmdline, struct meminfo *mi)
