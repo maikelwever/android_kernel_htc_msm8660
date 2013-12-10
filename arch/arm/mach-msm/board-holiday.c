@@ -2216,79 +2216,104 @@ static void __init msm8x60_init_dsps(void)
 }
 #endif /* CONFIG_MSM_DSPS */
 
+#if defined(CONFIG_CRYPTO_DEV_QCRYPTO) || \
+                defined(CONFIG_CRYPTO_DEV_QCRYPTO_MODULE) || \
+                defined(CONFIG_CRYPTO_DEV_QCEDEV) || \
+                defined(CONFIG_CRYPTO_DEV_QCEDEV_MODULE)
+#define QCE_SIZE                0x10000
+#define QCE_0_BASE                0x18500000
+#endif
+
 #ifdef CONFIG_FB_MSM_LCDC_DSUB
-/* VGA = 1440 x 900 x 4(bpp) x 2(pages)
-   prim = 1024 x 600 x 4(bpp) x 2(pages)
-   This is the difference. */
 #define MSM_FB_DSUB_PMEM_ADDER (0x9E3400-0x4B0000)
 #else
 #define MSM_FB_DSUB_PMEM_ADDER (0)
 #endif
 
 #ifdef CONFIG_FB_MSM_TRIPLE_BUFFER
-#define MSM_FB_PRIM_BUF_SIZE \
-                (roundup((960 * 540 * 4), 4096) * 3) /* 4 bpp x 3 pages */ /*0x5F1000*/
+#define MSM_FB_PRIM_BUF_SIZE (960 * ALIGN(540, 32) * 4 * 3)
 #else
-#define MSM_FB_PRIM_BUF_SIZE \
-                (roundup((960 * 540 * 4), 4096) * 2) /* 4 bpp x 2 pages */ /*0x3F6000*/
+#define MSM_FB_PRIM_BUF_SIZE (960 * ALIGN(540, 32) * 4 * 2)
+#endif
+
+
+#ifdef CONFIG_FB_MSM_OVERLAY0_WRITEBACK
+#define MSM_FB_WRITEBACK_SIZE roundup(960 * ALIGN(540, 32) * 3 * 2, 4096)
+#else
+#define MSM_FB_WRITEBACK_SIZE 0
 #endif
 
 #ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
-#define MSM_FB_EXT_BUF_SIZE  \
-                (roundup((1920 * 1080 * 2), 4096) * 1) /* 2 bpp x 1 page */ /*0x3F5000*/
+#define MSM_FB_SIZE roundup(MSM_FB_PRIM_BUF_SIZE + 0x3F4800 + MSM_FB_DSUB_PMEM_ADDER, 4096)
+#elif defined(CONFIG_FB_MSM_TVOUT)
+#define MSM_FB_SIZE roundup(MSM_FB_PRIM_BUF_SIZE + 0x195000 + MSM_FB_DSUB_PMEM_ADDER, 4096)
+#else 
+#define MSM_FB_SIZE roundup(MSM_FB_PRIM_BUF_SIZE + MSM_FB_DSUB_PMEM_ADDER, 4096)
+#endif 
+#ifdef CONFIG_MSM_IOMMU
+#define MSM_PMEM_SF_SIZE 0x00000000 
 #else
-#define MSM_FB_EXT_BUF_SIZE        0
+#define MSM_PMEM_SF_SIZE 0x4000000 
 #endif
+//#define MSM_OVERLAY_BLT_SIZE   roundup(960 * ALIGN(540, 32) * 3 * 2, 4096)
+//#define MSM_FB_WRITEBACK_SIZE - MSM_OVERLAY_BLT_SIZE
 
-#ifdef CONFIG_FB_MSM_OVERLAY_WRITEBACK
-/* width x height x 3 bpp x 2 frame buffer */
-#define MSM_FB_WRITEBACK_SIZE 0x2F8000 /*roundup((960 * 540 * 3 * 2), 4096)*/
-#define MSM_FB_WRITEBACK_OFFSET 0
-#else
-#define MSM_FB_WRITEBACK_SIZE   0
-#define MSM_FB_WRITEBACK_OFFSET 0
-#endif
+#define MSM_PMEM_KERNEL_EBI1_SIZE  0x600000 
+#define MSM_PMEM_ADSP_SIZE        0x1800000
+#define MSM_PMEM_AUDIO_SIZE        0x239000
 
-/* Note: must be multiple of 4096 */
-#define MSM_FB_SIZE 0x6F0000
+//#define MSM_PMEM_SF_BASE                (0x70000000 - MSM_PMEM_SF_SIZE)
+#define MSM_PMEM_ADSP_BASE                (0x80000000 - MSM_PMEM_ADSP_SIZE)
+#define MSM_FB_BASE                                (0x40400000)
+#define MSM_PMEM_AUDIO_BASE                (0x46400000)
 
-/* Kernel SMI PMEM Region for video core, used for Firmware */
-/* and encoder,decoder scratch buffers */
-/* Kernel SMI PMEM Region Should always precede the user space */
-/* SMI PMEM Region, as the video core will use offset address */
-/* from the Firmware base */
+
+#define MSM_SMI_BASE          0x38000000
+#define MSM_SMI_SIZE          0x4000000
+
 #define KERNEL_SMI_BASE       (MSM_SMI_BASE)
-#define KERNEL_SMI_SIZE       0x500000
+#define KERNEL_SMI_SIZE       0x400000
 
-#define MSM_SMI_BASE          (0x38000000)
-#define MSM_SMI_SIZE          (0x4000000)
-
-/* User space SMI PMEM Region for video core*/
-/* used for encoder, decoder input & output buffers  */
 #define USER_SMI_BASE         (KERNEL_SMI_BASE + KERNEL_SMI_SIZE)
 #define USER_SMI_SIZE         (MSM_SMI_SIZE - KERNEL_SMI_SIZE)
 #define MSM_PMEM_SMIPOOL_BASE USER_SMI_BASE
 #define MSM_PMEM_SMIPOOL_SIZE USER_SMI_SIZE
 
-/* PMEM Memory map */
-#define MSM_PMEM_ADSP_SIZE    0x1600000
-#define MSM_PMEM_AUDIO_SIZE   0x239000
+#ifdef CONFIG_MSM_MULTIMEDIA_USE_ION
+#define MSM_ION_SF_SIZE       0x4000000
+//#define MSM_ION_CAMERA_SIZE   0x2000000
+//#define MSM_ION_ROTATOR_SIZE  MSM_PMEM_ADSP2_SIZE
+#define MSM_ION_MM_FW_SIZE    0x200000  
+#define MSM_ION_MM_SIZE       0x3D00000 
+#define MSM_ION_MFC_SIZE      0x100000  
+#define MSM_ION_WB_SIZE       0x2FD000  
 
-#define MSM_PMEM_AUDIO_BASE   (MSM_PMEM_ADSP_BASE - MSM_PMEM_AUDIO_SIZE)
-#define MSM_PMEM_ADSP_BASE    (0x80000000 - MSM_PMEM_ADSP_SIZE)
+#ifdef CONFIG_TZCOM
+#define MSM_ION_QSECOM_SIZE   MSM_PMEM_KERNEL_EBI1_SIZE
+#ifdef CONFIG_MSM_IOMMU
+#define MSM_ION_HEAP_NUM      9
+#else
+#define MSM_ION_HEAP_NUM      10
+#endif
+#else
+#ifdef CONFIG_MSM_IOMMU
+#define MSM_ION_HEAP_NUM      8
+#else
+#define MSM_ION_HEAP_NUM      9
+#endif
+#endif
 
-/* END PMEM Memory map */
+//#define MSM_ION_CAMERA_BASE   (0x40E00000)        
+#define MSM_ION_WB_BASE       (0x46400000)
+#define MSM_ION_AUDIO_BASE    (MSM_PMEM_ADSP_BASE - MSM_PMEM_AUDIO_SIZE)
 
-/* ION Memory map */
-#define MSM_ION_HEAP_NUM      3
+#else 
+#define MSM_ION_HEAP_NUM      1
+#endif
 
-#define MSM_ION_SF_SIZE       0x29A0000
-#define MSM_ION_WB_SIZE       0x2FD000  /* MSM_OVERLAY_BLT_SIZE */
+#define PHY_BASE_ADDR1  0x48000000
+#define SIZE_ADDR1        0x35100000
 
-#define MSM_ION_SF_BASE       (0x40400000)
-#define MSM_ION_WB_BASE       (0x45C00000)
-
-/* END ION Memory map */
 
 static unsigned fb_size;
 static int __init fb_size_setup(char *p)
@@ -2418,7 +2443,7 @@ static struct ion_platform_data ion_pdata = {
 			.id	= ION_SF_HEAP_ID,
 			.type	= ION_HEAP_TYPE_CARVEOUT,
 			.name	= ION_SF_HEAP_NAME,
-			.base	= MSM_ION_SF_BASE,
+			//.base	= MSM_ION_SF_BASE,
 			.size	= MSM_ION_SF_SIZE,
 			.memory_type = ION_EBI_TYPE,
 			.extra_data = (void *) &co_ion_pdata,
@@ -7327,9 +7352,6 @@ static void __init holiday_init(void)
 	msm8x60_init(&holiday_board_data);
 	printk(KERN_INFO "%s revision=%d engineerid=%d\n", __func__, system_rev, engineerid);
 }
-
-#define PHY_BASE_ADDR1  0x48000000
-#define SIZE_ADDR1	  0x30000000
 
 static void __init holiday_fixup(struct machine_desc *desc, struct tag *tags,
 				 char **cmdline, struct meminfo *mi)
