@@ -3896,18 +3896,17 @@ static void __init reserve_pmem_memory(void)
 
 static void __init reserve_ion_memory(void)
 {
-#if defined(CONFIG_ION_MSM) && defined(CONFIG_MSM_MULTIMEDIA_USE_ION)
-	msm8x60_reserve_table[MEMTYPE_SMI_ION].size += MSM_ION_MM_SIZE;
-	msm8x60_reserve_table[MEMTYPE_EBI1].size += MSM_ION_SF_SIZE;
-#endif
+	//Do nothing
 }
 
+#ifdef CONFIG_ION_MSM
 static void __init msm8x60_calculate_reserve_sizes(void)
 {
 	size_pmem_devices();
 	reserve_pmem_memory();
 	reserve_ion_memory();
 }
+#endif
 
 static int msm8x60_paddr_to_memtype(phys_addr_t paddr)
 {
