@@ -6903,28 +6903,28 @@ static struct memtype_reserve msm8x60_reserve_table[] __initdata = {
 	/* SMI memory pool, as the video core will use offset address */
 	/* from the Firmware base */
 	[MEMTYPE_SMI_KERNEL] = {
-		.start	= KERNEL_SMI_BASE,
-		.limit	= KERNEL_SMI_SIZE,
-		.size	= KERNEL_SMI_SIZE,
-		.flags	= MEMTYPE_FLAGS_FIXED,
+		.start	=	KERNEL_SMI_BASE,
+		.limit	=	KERNEL_SMI_SIZE,
+		.size	=	KERNEL_SMI_SIZE,
+		.flags	=	MEMTYPE_FLAGS_FIXED,
 	},
 	/* User space SMI memory pool for video core */
 	/* used for encoder, decoder input & output buffers  */
 	[MEMTYPE_SMI] = {
-		.start	= USER_SMI_BASE,
-		.limit	= USER_SMI_SIZE,
-		.flags	= MEMTYPE_FLAGS_FIXED,
+		.start	=	USER_SMI_BASE,
+		.limit	=	USER_SMI_SIZE,
+		.flags	=	MEMTYPE_FLAGS_FIXED,
 	},
-	[MEMTYPE_SMI_ION] = {
-		.start	= MSM_SMI_ION_BASE,
-		.limit	= MSM_SMI_ION_SIZE,
-		.flags	= MEMTYPE_FLAGS_FIXED,
-	},
+        [MEMTYPE_SMI_ION] = {
+                .start  = MSM_SMI_ION_BASE,
+                .limit  = MSM_SMI_ION_SIZE,
+                .flags  = MEMTYPE_FLAGS_FIXED,
+        },
 	[MEMTYPE_EBI0] = {
-		.flags	= MEMTYPE_FLAGS_1M_ALIGN,
+		.flags	=	MEMTYPE_FLAGS_1M_ALIGN,
 	},
 	[MEMTYPE_EBI1] = {
-		.flags	= MEMTYPE_FLAGS_1M_ALIGN,
+		.flags	=	MEMTYPE_FLAGS_1M_ALIGN,
 	},
 };
 
@@ -6937,6 +6937,7 @@ static void __init size_pmem_device(struct android_pmem_platform_data *pdata, un
 		__func__, size, __va(start), start, pdata->name);
 }
 #endif
+
 static void __init size_pmem_devices(void)
 {
 #ifdef CONFIG_ANDROID_PMEM
@@ -6946,11 +6947,21 @@ static void __init size_pmem_devices(void)
 #endif
 }
 
+#ifdef CONFIG_ION_MSM
+static void __init reserve_ion_memory(void)
+{
+// do nothing
+}
+#endif
+
 #ifdef CONFIG_ANDROID_PMEM
 static void __init reserve_memory_for(struct android_pmem_platform_data *p)
 {
+	/* If we have set a pre-defined PMEM start base,
+	 * no need to reserve it in system again.
+	 */
 	if (p->start == 0) {
-		pr_info("%s: reserve %lu bytes from memory %d for %s.\r\n", __func__, p->size, p->memory_type, p->name);
+		pr_info("%s: reserving %lx bytes in memory pool for %s.\n", __func__, p->size, p->name);
 		msm8x60_reserve_table[p->memory_type].size += p->size;
 	}
 }
@@ -6964,24 +6975,18 @@ static void __init reserve_pmem_memory(void)
 	reserve_memory_for(&android_pmem_audio_pdata);
 #endif
 }
-
-static void __init reserve_ion_memory(void)
-{
-	//Do nothing
-}
-
-#ifdef CONFIG_ION_MSM
 static void __init msm8x60_calculate_reserve_sizes(void)
 {
 	size_pmem_devices();
 	reserve_pmem_memory();
+#ifdef CONFIG_ION_MSM
 	reserve_ion_memory();
-}
 #endif
+}
 
 static int msm8x60_paddr_to_memtype(phys_addr_t paddr)
 {
-	if (paddr >= 0x40000000 && paddr < 0x80000000)
+	if (paddr >= 0x40000000 && paddr < 0x60000000)
 		return MEMTYPE_EBI1;
 	if (paddr >= 0x38000000 && paddr < 0x40000000)
 		return MEMTYPE_SMI;
