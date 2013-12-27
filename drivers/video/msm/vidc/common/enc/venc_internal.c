@@ -987,11 +987,11 @@ u32 vid_enc_set_get_entropy_cfg(struct video_client_ctx *client_ctx,
 		} else {
 			switch (control.entropy_sel) {
 			case VCD_ENTROPY_SEL_CABAC:
-				entropy_cfg->entropysel =
+				entropy_cfg->cabacmodel =
 					VEN_ENTROPY_MODEL_CABAC;
 				break;
 			case VCD_ENTROPY_SEL_CAVLC:
-				entropy_cfg->entropysel =
+				entropy_cfg->cabacmodel =
 					VEN_ENTROPY_MODEL_CAVLC;
 				break;
 			default:
