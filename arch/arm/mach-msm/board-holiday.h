@@ -88,7 +88,7 @@
 
 /* ION memory map */
 #ifdef CONFIG_MSM_MULTIMEDIA_USE_ION
-#define MSM_ION_MM_SIZE         0x2C00000
+#define MSM_ION_MM_SIZE         0x2D00000
 #define MSM_ION_SF_SIZE         0x2800000
 #define MSM_ION_WB_SIZE         0x2FD000
 #define MSM_SMI_ION_SIZE        0x3000000
