@@ -97,20 +97,18 @@
 #define MSM_SMI_ION_BASE        0x40400000
 #define MSM_ION_MM_BASE         0x40400000
 
-
-
 #ifdef CONFIG_TZCOM
 #define MSM_ION_QSECOM_SIZE   0x600000
 #ifdef CONFIG_MSM_IOMMU
-#define MSM_ION_HEAP_NUM      9
+#define MSM_ION_HEAP_NUM      4
 #else
-#define MSM_ION_HEAP_NUM      10
+#define MSM_ION_HEAP_NUM      5
 #endif
 #else
 #ifdef CONFIG_MSM_IOMMU
-#define MSM_ION_HEAP_NUM      8
+#define MSM_ION_HEAP_NUM      3
 #else
-#define MSM_ION_HEAP_NUM      9
+#define MSM_ION_HEAP_NUM      4
 #endif
 #endif
 
