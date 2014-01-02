@@ -3893,20 +3893,20 @@ static void __init reserve_pmem_memory(void)
 	reserve_memory_for(&android_pmem_audio_pdata);
 #endif
 }
+#ifdef CONFIG_ION_MSM
 
 static void __init reserve_ion_memory(void)
 {
 	//Do nothing
 }
+#endif
 
-#ifdef CONFIG_ION_MSM
 static void __init msm8x60_calculate_reserve_sizes(void)
 {
 	size_pmem_devices();
 	reserve_pmem_memory();
 	reserve_ion_memory();
 }
-#endif
 
 static int msm8x60_paddr_to_memtype(phys_addr_t paddr)
 {
