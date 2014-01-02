@@ -89,17 +89,11 @@
 #define MSM_PMEM_AUDIO_SIZE   0x239000
 
 #define MSM_PMEM_ADSP_BASE    (0x80000000 - MSM_PMEM_ADSP_SIZE)
-//#define MSM_PMEM_ADSP_BASE      0x7EE00000
 #define MSM_PMEM_AUDIO_BASE   (0x46400000)
 
 /* ION memory map */
 #ifdef CONFIG_MSM_MULTIMEDIA_USE_ION
-//#define MSM_ION_SF_SIZE       0x4000000
-//#define MSM_ION_MM_FW_SIZE    0x200000
-//#define MSM_ION_MM_SIZE       0x3D00000
-//#define MSM_ION_MFC_SIZE      0x100000
-//#define MSM_ION_WB_SIZE       0x2FD000
-#define MSM_ION_MM_SIZE         0x2C00000
+#define MSM_ION_MM_SIZE         0x2D00000
 #define MSM_ION_SF_SIZE         0x2800000
 #define MSM_ION_WB_SIZE         0x2FD000
 #define MSM_SMI_ION_SIZE        0x3000000
@@ -108,20 +102,18 @@
 #define MSM_SMI_ION_BASE        0x40400000
 #define MSM_ION_MM_BASE         0x40400000
 
-
-
 #ifdef CONFIG_TZCOM
 #define MSM_ION_QSECOM_SIZE   0x600000
 #ifdef CONFIG_MSM_IOMMU
-#define MSM_ION_HEAP_NUM      9
+#define MSM_ION_HEAP_NUM      4
 #else
-#define MSM_ION_HEAP_NUM      10
+#define MSM_ION_HEAP_NUM      5
 #endif
 #else
 #ifdef CONFIG_MSM_IOMMU
-#define MSM_ION_HEAP_NUM      8
+#define MSM_ION_HEAP_NUM      3
 #else
-#define MSM_ION_HEAP_NUM      9
+#define MSM_ION_HEAP_NUM      4
 #endif
 #endif
 
@@ -132,7 +124,6 @@
 #endif
 
 #define PHY_BASE_ADDR1  0x48000000
-//#define SIZE_ADDR1        0x35100000
 #define SIZE_ADDR1        0x34600000
 
 /* Memory map END */
