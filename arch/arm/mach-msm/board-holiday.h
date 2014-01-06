@@ -16,6 +16,7 @@
 #define __ARCH_ARM_MACH_MSM_BOARD_HOLIDAY_H
 
 #include <mach/board.h>
+#include <mach/msm_memtypes.h>
 
 #define HOLIDAY_PROJECT_NAME	"holiday"
 
