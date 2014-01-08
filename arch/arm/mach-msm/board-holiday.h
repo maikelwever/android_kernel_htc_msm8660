@@ -63,14 +63,15 @@
 #define MSM_PMEM_SMIPOOL_BASE USER_SMI_BASE
 #define MSM_ION_SF_BASE       (0x40400000)
 #define MSM_PMEM_AUDIO_BASE   (0x46400000)
-#define MSM_ION_WB_BASE       (0x6A900000)
-#define MSM_ION_MM_FW_BASE    (0x6B100000)
-#define MSM_ION_MM_BASE       (0x6B300000)
-#define MSM_PMEM_ADSP_BASE    (0x6E800000)
+#define MSM_ION_WB_BASE       (0x7A900000)
+#define MSM_ION_MM_FW_BASE    (0x7B100000)
+#define MSM_ION_MM_BASE       (0x7B300000)
+#define MSM_PMEM_ADSP_BASE    (0x7E800000)
 
 // Userspace allocation
 #define PHY_BASE_ADDR1  0x48000000
-#define SIZE_ADDR1      0x22900000
+//#define SIZE_ADDR1      0x32900000
+#define SIZE_ADDR1      0x2B300000
 /*** END Memory map ***/
 
 extern int panel_type;
