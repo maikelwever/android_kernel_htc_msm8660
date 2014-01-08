@@ -48,9 +48,11 @@
 #define MSM_PMEM_AUDIO_SIZE   0x239000
 #define MSM_PMEM_ADSP_SIZE    0x1800000
 
-// ION SMI
-#define MSM_ION_MM_SIZE       0x3000000
-#define MSM_SMI_ION_SIZE      0x3200000
+#ifdef CONFIG_FB_MSM_OVERLAY0_WRITEBACK
+#define MSM_FB_WRITEBACK_SIZE roundup(960 * ALIGN(540, 32) * 3 * 2, 4096)
+#else
+#define MSM_FB_WRITEBACK_SIZE 0
+#endif
 
 // ION
 #define MSM_ION_WB_SIZE       0x2FD000
@@ -64,11 +66,26 @@
 #define MSM_ION_SF_BASE       (0x40400000)
 #define MSM_ION_WB_BASE       (0x45C00000)
 #define MSM_PMEM_AUDIO_BASE   (0x46400000)
-#define MSM_ION_MM_BASE       (0x7B600000)
-#define MSM_SMI_ION_BASE      (0x7B600000)
-#define MSM_PMEM_ADSP_BASE    (0x7E800000)
 
-// Userspace allocation
+/* ION memory map */
+
+#ifdef CONFIG_TZCOM
+#define MSM_ION_QSECOM_SIZE   0x600000
+#endif
+
+#define MSM_ION_HEAP_NUM        5
+
+#define MSM_ION_MM_SIZE         0x2D00000
+#define MSM_ION_SF_SIZE         0x2800000
+#define MSM_ION_MM_FW_SIZE      0x200000
+#define MSM_ION_WB_SIZE         0x2FD000
+#define MSM_SMI_ION_SIZE        0x3000000
+
+#define MSM_ION_SF_BASE         0x7C600000
+#define MSM_ION_MM_FW_BASE      0x40400000
+#define MSM_ION_MM_BASE         0x40600000
+#define MSM_ION_WB_BASE       (0x46400000)
+
 #define PHY_BASE_ADDR1  0x48000000
 #define SIZE_ADDR1      0x35100000
 /*** END Memory map ***/
