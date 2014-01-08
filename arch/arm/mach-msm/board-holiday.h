@@ -70,8 +70,8 @@
 
 // Userspace allocation
 #define PHY_BASE_ADDR1  0x48000000
-//#define SIZE_ADDR1      0x32900000
-#define SIZE_ADDR1      0x2B300000
+#define SIZE_ADDR1      0x32900000
+//#define SIZE_ADDR1      0x2B300000
 /*** END Memory map ***/
 
 extern int panel_type;
