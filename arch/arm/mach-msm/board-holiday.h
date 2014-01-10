@@ -1,6 +1,7 @@
 /* linux/arch/arm/mach-msm/board-holiday.h
  *
  * Copyright (C) 2010-2011 HTC Corporation.
+ * Copyright (C) 2013-2014 Matt Filetto.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -70,7 +71,8 @@
 
 // Userspace allocation
 #define PHY_BASE_ADDR1  0x48000000
-#define SIZE_ADDR1      0x32900000
+//#define SIZE_ADDR1      0x32900000
+#define SIZE_ADDR1      0x32400000
 //#define SIZE_ADDR1      0x2B300000
 /*** END Memory map ***/
 
