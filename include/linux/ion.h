@@ -42,8 +42,9 @@ enum ion_heap_type {
 	ION_HEAP_TYPE_CARVEOUT,
 	ION_HEAP_TYPE_IOMMU,
 	ION_HEAP_TYPE_CP,
-	ION_HEAP_TYPE_CUSTOM, 
-	ION_NUM_HEAPS,
+	ION_HEAP_TYPE_CUSTOM, /* must be last so device specific heaps always
+				 are at the end of this enum */
+	ION_NUM_HEAPS = 16,
 };
 
 #define ION_HEAP_SYSTEM_MASK		(1 << ION_HEAP_TYPE_SYSTEM)
@@ -70,12 +71,6 @@ enum ion_heap_type {
  */
 
 enum ion_heap_ids {
-	ION_HEAP_SYSTEM_ID = -1, /* depreciated */
-	ION_HEAP_SYSTEM_CONTIG_ID = -1, /* depreciated ID */
-	ION_HEAP_SMI_ID = -1, /* depreciated ID */
-	ION_HEAP_AUDIO_ID = -1, /* depreciated ID */
-	ION_HEAP_ADSP2_ID = -1, /* depreciated ID */
-
 	INVALID_HEAP_ID = -1,
 	/* In a system with the "Mini Ion Upgrade" (such as this one)
 	 * the heap_mask and caching flag end up sharing a spot in
@@ -85,10 +80,9 @@ enum ion_heap_ids {
 	 */
 	ION_BOGUS_HEAP_DO_NOT_USE = 0,
 	ION_CP_MM_HEAP_ID = 8,
-	ION_CP_ROTATOR_HEAP_ID = 9,
 	ION_CP_MFC_HEAP_ID = 12,
-	ION_CP_WB_HEAP_ID = 16, 
-	ION_CAMERA_HEAP_ID = 20, 
+	ION_CP_WB_HEAP_ID = 16, /* 8660 only */
+	ION_CAMERA_HEAP_ID = 20, /* 8660 only */
 	ION_SF_HEAP_ID = 24,
 	ION_IOMMU_HEAP_ID = 25,
 	ION_QSECOM_HEAP_ID = 27,
@@ -97,7 +91,7 @@ enum ion_heap_ids {
 	ION_MM_FIRMWARE_HEAP_ID = 29,
 	ION_SYSTEM_HEAP_ID = 30,
 
-	ION_HEAP_ID_RESERVED = 31 
+	ION_HEAP_ID_RESERVED = 31 /** Bit reserved for ION_SECURE flag */
 };
 
 enum ion_fixed_position {
@@ -117,12 +111,10 @@ enum ion_fixed_position {
  */
 #define ION_HEAP(bit) (1 << (bit))
 
-#define ION_KMALLOC_HEAP_NAME	"kmalloc"
 #define ION_VMALLOC_HEAP_NAME	"vmalloc"
 #define ION_AUDIO_HEAP_NAME	"audio"
 #define ION_SF_HEAP_NAME	"sf"
 #define ION_MM_HEAP_NAME	"mm"
-#define ION_ROTATOR_HEAP_NAME   "rotator"
 #define ION_CAMERA_HEAP_NAME	"camera_preview"
 #define ION_IOMMU_HEAP_NAME	"iommu"
 #define ION_MFC_HEAP_NAME	"mfc"
