@@ -92,7 +92,7 @@
 /* SMI PMEM Region, as the video core will use offset address */
 /* from the Firmware base */
 #define KERNEL_SMI_BASE		(MSM_SMI_BASE)
-#define KERNEL_SMI_SIZE		0x600000
+#define KERNEL_SMI_SIZE		0xE00000
 
 /* User space SMI PMEM Region for video core*/
 /* used for encoder, decoder input & output buffers  */
@@ -102,7 +102,7 @@
 #define MSM_PMEM_SMIPOOL_SIZE	USER_SMI_SIZE
 
 #define PHY_BASE_ADDR1		0x48000000
-#define SIZE_ADDR1		0x34600000
+#define SIZE_ADDR1		0x33000000
 
 /* GPIO definition */
 
