@@ -25,8 +25,6 @@
 #define MSM_RAM_CONSOLE_BASE	MSM_HTC_RAM_CONSOLE_PHYS
 #define MSM_RAM_CONSOLE_SIZE	MSM_HTC_RAM_CONSOLE_SIZE
 
-/* Memory Map */
-
 #if defined(CONFIG_CRYPTO_DEV_QCRYPTO) || \
                 defined(CONFIG_CRYPTO_DEV_QCRYPTO_MODULE) || \
                 defined(CONFIG_CRYPTO_DEV_QCEDEV) || \
@@ -35,94 +33,46 @@
 #define QCE_0_BASE                0x18500000
 #endif
 
-#ifdef CONFIG_FB_MSM_LCDC_DSUB
-#define MSM_FB_DSUB_PMEM_ADDER (0x9E3400-0x4B0000)
-#else
-#define MSM_FB_DSUB_PMEM_ADDER (0)
-#endif
+/*** Memory map ***/
+#define MSM_ION_HEAP_NUM      5
 
-#ifdef CONFIG_FB_MSM_TRIPLE_BUFFER
-#define MSM_FB_PRIM_BUF_SIZE (960 * ALIGN(540, 32) * 4 * 3)
-#else
-#define MSM_FB_PRIM_BUF_SIZE (960 * ALIGN(540, 32) * 4 * 2)
-#endif
+#define MSM_FB_SIZE roundup((960 * ALIGN(540, 32) * 4 * 3) + 0x3F4800, 4096)
 
-
-#ifdef CONFIG_FB_MSM_OVERLAY0_WRITEBACK
-#define MSM_FB_WRITEBACK_SIZE roundup(960 * ALIGN(540, 32) * 3 * 2, 4096)
-#else
-#define MSM_FB_WRITEBACK_SIZE 0
-#endif
-
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
-#define MSM_FB_SIZE roundup(MSM_FB_PRIM_BUF_SIZE + 0x3F4800 + MSM_FB_DSUB_PMEM_ADDER, 4096)
-#elif defined(CONFIG_FB_MSM_TVOUT)
-#define MSM_FB_SIZE roundup(MSM_FB_PRIM_BUF_SIZE + 0x195000 + MSM_FB_DSUB_PMEM_ADDER, 4096)
-#else 
-#define MSM_FB_SIZE roundup(MSM_FB_PRIM_BUF_SIZE + MSM_FB_DSUB_PMEM_ADDER, 4096)
-#endif 
-
-/* Kernel SMI PMEM Region for video core, used for Firmware */
-/* and encoder,decoder scratch buffers */
-/* Kernel SMI PMEM Region Should always precede the user space */
-/* SMI PMEM Region, as the video core will use offset address */
-/* from the Firmware base */
-#define KERNEL_SMI_BASE       (MSM_SMI_BASE)
-#define KERNEL_SMI_SIZE       0x400000
-
-#define MSM_SMI_BASE          0x38000000
+// PMEM SMI
 #define MSM_SMI_SIZE          0x4000000
-
-/* User space SMI PMEM Region for video core*/
-/* used for encoder, decoder input & output buffers  */
-#define USER_SMI_BASE         (KERNEL_SMI_BASE + KERNEL_SMI_SIZE)
+#define KERNEL_SMI_SIZE       0x600000
 #define USER_SMI_SIZE         (MSM_SMI_SIZE - KERNEL_SMI_SIZE)
-#define MSM_PMEM_SMIPOOL_BASE USER_SMI_BASE
 #define MSM_PMEM_SMIPOOL_SIZE USER_SMI_SIZE
 
-/* PMEM memory map */
-#define MSM_PMEM_ADSP_SIZE    0x1800000
+// PMEM
 #define MSM_PMEM_AUDIO_SIZE   0x239000
+#define MSM_PMEM_ADSP_SIZE    0x1800000
 
-#define MSM_PMEM_ADSP_BASE    (0x80000000 - MSM_PMEM_ADSP_SIZE)
+// ION SMI
+#define MSM_ION_MM_SIZE       0x3500000
+
+// ION
+#define MSM_ION_WB_SIZE       0x800000
+#define MSM_ION_SF_SIZE       0x29A0000
+#define MSM_ION_MM_FW_SIZE    0x200000
+
+// Base addresses
+#define MSM_SMI_BASE          (0x38000000)
+#define KERNEL_SMI_BASE       (MSM_SMI_BASE)
+#define USER_SMI_BASE         (KERNEL_SMI_BASE + KERNEL_SMI_SIZE)
+#define MSM_PMEM_SMIPOOL_BASE USER_SMI_BASE
+#define MSM_ION_SF_BASE       (0x40400000)
 #define MSM_PMEM_AUDIO_BASE   (0x46400000)
+#define MSM_ION_WB_BASE       (0x7A900000)
+#define MSM_ION_MM_FW_BASE    (0x7B100000)
+#define MSM_ION_MM_BASE       (0x7B300000)
+#define MSM_PMEM_ADSP_BASE    (0x7E800000)
 
-/* ION memory map */
-#ifdef CONFIG_MSM_MULTIMEDIA_USE_ION
-#define MSM_ION_MM_SIZE         0x2D00000
-#define MSM_ION_SF_SIZE         0x2800000
-#define MSM_ION_WB_SIZE         0x2FD000
-#define MSM_SMI_ION_SIZE        0x3000000
-
-#define MSM_ION_SF_BASE         0x7C600000
-#define MSM_SMI_ION_BASE        0x40400000
-#define MSM_ION_MM_BASE         0x40400000
-
-#ifdef CONFIG_TZCOM
-#define MSM_ION_QSECOM_SIZE   0x600000
-#ifdef CONFIG_MSM_IOMMU
-#define MSM_ION_HEAP_NUM      4
-#else
-#define MSM_ION_HEAP_NUM      5
-#endif
-#else
-#ifdef CONFIG_MSM_IOMMU
-#define MSM_ION_HEAP_NUM      3
-#else
-#define MSM_ION_HEAP_NUM      4
-#endif
-#endif
-
-#define MSM_ION_WB_BASE       (0x46400000)
-
-#else 
-#define MSM_ION_HEAP_NUM      4
-#endif
-
+// Userspace allocation
 #define PHY_BASE_ADDR1  0x48000000
-#define SIZE_ADDR1        0x34600000
-
-/* Memory map END */
+#define SIZE_ADDR1      0x32900000
+//#define SIZE_ADDR1      0x2B300000
+/*** END Memory map ***/
 
 extern int panel_type;
 
